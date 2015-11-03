@@ -54,11 +54,6 @@ calendar school-calendar {
 		event art {
 			times { weekly( 1pm - 3pm Tues, Thur) }
 		}
-
-		event advisor-meeting {
-			times { monthly( 1pm - 3pm 1st Tues) }
-			type: individual
-		}
 	}
 
 	section finals {
@@ -67,6 +62,11 @@ calendar school-calendar {
 		}
 
 		...
+	}
+
+	event payBills {
+		times { monthly( 2pm - 3pm 30th) }
+		type: individual
 	}
 }
 ```

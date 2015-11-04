@@ -1,0 +1,18 @@
+maze
+state goingUp {
+	move up -> goingLeft;
+	else goingRight
+}
+state goingLeft {
+	move left -> goingDown;
+	else goingUp
+}
+state goingDown {
+	move down -> goingRight;
+	else goingLeft
+}
+state goingRight {
+	move right -> goingUp;
+	else goingDown
+}
+

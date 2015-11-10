@@ -4,6 +4,7 @@ package calendarscript.ir
  * @author aputman
  */
 
+import net.fortuna.ical4j.model._
 
 sealed abstract class AST
 //sealed abstract class Expr extends AST
@@ -27,11 +28,12 @@ sealed abstract class WeeklyTime extends AST
 sealed abstract class TimeRange extends AST
 sealed abstract class Time extends AST
 sealed abstract class WeekDays extends AST
-sealed abstract class WeekDayName extends AST
 
+// ++
 // Top level, every calendarscript must contain a CalendarDef
 case class CalendarDef(name: String, sectionForm: SectionForm) extends Cal
 
+// ++
 // Every definition of a calendar or section must contain a SectionForm
 // If a SectionForm contains dates, they must be at the top of the definition
 case class SecFormContainsDates(dates: Dates, filler: Filler) extends SectionForm
@@ -43,6 +45,7 @@ case class FillerEventWithMore(event: Event, rest: Filler) extends Filler
 case class FillerSection(section: Section) extends Filler
 case class FillerEvent(event: Event) extends Filler
 
+// ++
 // Dates are defined by includes and excludes. 
 case class DatesIncludesWithMore(includes: Includes, rest: Dates) extends Dates
 case class DatesExcludesWithMore(excludes: Excludes, rest: Dates) extends Dates
@@ -85,8 +88,8 @@ case class TimeRangeMultipleTimes(startTime: Time, endTime: Time) extends TimeRa
 
 // TODO: ADD IN TIME REPRESENTATION
 
-case class WeekDaysSingleDay(dayName: WeekDayName) extends WeekDays
-case class WeekDaysMultipleDays(dayName: WeekDayName, rest: WeekDays) extends WeekDays
+case class WeekDaysSingleDay(dayName: WeekDay) extends WeekDays
+case class WeekDaysMultipleDays(dayName: WeekDay, rest: WeekDays) extends WeekDays
 
 // TODO: ADD IN WEEK DAY NAMES 
 

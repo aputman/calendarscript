@@ -6,7 +6,7 @@ import net.fortuna.ical4j.model.component._
 import net.fortuna.ical4j.model.parameter._
 import net.fortuna.ical4j.model.property._
 
-class ICalHelper {
+object ICalHelper {
   def createVEvents(periods: PeriodList, times: List[(DateTime, DateTime, Recur)]): List[VEvent] = {
     var events = List[VEvent]()
     times.foreach{

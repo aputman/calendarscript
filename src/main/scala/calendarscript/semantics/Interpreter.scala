@@ -7,27 +7,13 @@ package calendarscript
 import calendarscript.ir._
 import java.io.File
 import scalafx.application.JFXApp
-
+import calendarscript.semantics._
 import picolib.maze.Maze
 import net.fortuna.ical4j.model._
 import net.fortuna.ical4j.model.component._
 import net.fortuna.ical4j.model.property._
 
-class interpreter extends JFXApp {
-  def picobot(mazename: String)(rs: Seq[Rule]*): List[Rule] = {
-    val rules = rs.flatten.toList
-    
-    val maze = Maze("resources" + File.separator + s"${mazename}.txt")
-    object RuleBot extends Picobot(maze, rules)
-      with TextDisplay with GUIDisplay
-    RuleBot.run()
-    stage = RuleBot.mainStage
-    
-    rules
-  }
-}
-
-package object semantics extends interpreter{
+class interpreter{
   
   case class RulesDontMakeSense(msg: String) extends Exception(msg)
   
@@ -139,54 +125,11 @@ package object semantics extends interpreter{
     
     event match {
       case EventDef(name: String, times: TimeOptions, otherFields: ExtraEventFields) => {
-        var rdate = new RDate(periodList)
+        var evalTimes = List[(DateTime, DateTime, Recur)]()
+        ICalHelper.createVEvents(periodList, evalTimes)
       }
     }
   }
-  
-  def applyAugment(aug: Augment, rule: Rule): Rule = {
-    val UndefinedStateString: String = "!!__ UN DE FI NE D __!!"
-    val UndefState = State(UndefinedStateString)
-    aug match {
-      case Move(dir) => 
-        {
-          val newRule = rule.copy(moveDirection = dir)
-          applyAugment(new Restrict(dir, Open), newRule)
-        }
-      case Stay() => rule.copy(moveDirection = StayHere)
-      case Restrict(dir, relDisc) => 
-        val curDir = dir match {
-          case North => rule.surroundings.north
-          case South => rule.surroundings.south
-          case East => rule.surroundings.east
-          case West => rule.surroundings.west
-        }
-        if (curDir != Anything) {
-          throw RulesDontMakeSense(s"You tried to set the surroundings in the ${dir} direction twice! Specifically, to ${curDir} and ${dir}.")
-        }
-        rule.copy(
-          surroundings = dir match {
-            case North => rule.surroundings.copy(north = relDisc)
-            case South => rule.surroundings.copy(south = relDisc)
-            case East => rule.surroundings.copy(east = relDisc)
-            case West => rule.surroundings.copy(west = relDisc)
-          })
-      case StateDef(stateName: String) => {
-        val newRule = rule.copy(startState = new State(stateName))
-        if (newRule.endState == State(UndefinedStateString)) {
-          newRule.copy(endState = newRule.startState)
-        } else {
-          newRule
-        }
-      }
-      case MoveState(stateName: String) => {
-        if (rule.endState != State(UndefinedStateString)) {
-          throw RulesDontMakeSense(s"You set the end state twice! Specifically, to both ${rule.endState} and ${State(stateName)}.")
-        }
-        rule.copy(endState = new State(stateName))
-      }
-    }
-}
   
   
 }

@@ -1,14 +1,57 @@
 package calendarscript.parser
 
 import scala.util.parsing.combinator._
+
 import calendarscript.ir._
 import calendarscript.ir.sugar._
 
-object PiconotParser extends JavaTokenParsers with PackratParsers {
+import net.fortuna.ical4j.model._
+import net.fortuna.ical4j.model.component._
+import net.fortuna.ical4j.model.property._
+
+object CalendarParser extends JavaTokenParsers with PackratParsers {
     // parsing interface
     def apply(s: String): ParseResult[AST] = {
       parseAll(multiTransformer, s)
     }
+    
+    
+    lazy val cal: PackratParser[Cal] = 
+      (   "calendar"~String~"{"~secform~"}" ^^ {case "calendar"~name~"{"~form~"}" => new CalendarDef(name, form)} 
+      )
+    
+    lazy val secform: PackratParser[SectionForm] = 
+      (  "dates"~"{"~dates~"}"~filler ^^ {case "dates"~"{"~d~"}"~f => new SecFormContainsDates(d, f)}
+        | filler ^^ {case f => new SecFormWithoutDates(f)}
+      )
+    
+    lazy val dates: PackRatParser[Dates] =
+      (  "includes"~"("~dateRanges~")"~","~dates ^^ {case "includes"~"("~dRange~")"~","~d => new DatesIncludesWithMore(new IncludesDef(dRange), d)}
+        | "excludes"~"("~dateRanges~")"~","~dates ^^ {case "excludes"~"("~dRange~")"~","~d => new DatesExcludesWithMore(new ExcludesDef(dRange), d)}
+        | "includes"~"("~dateRanges~")" ^^ {case "includes"~"("~dRange~")" => new DatesIncludes(new IncludesDef(dRange))}
+        | "excludes"~"("~dateRanges~")" ^^ {case "excludes"~"("~dRange~")" => new DatesExcludes(new ExcludesDef(dRange))}
+      )
+      
+    lazy val dateRanges: PackratParser[DateRanges] =
+      (  dateRange~","~dateRanges ^^ {case dr~","~rest => new DateRangesMultipleRanges(dr, dateRanges)}
+        | dateRange ^^ {case dr => new DateRangesSingleRange(dr)}
+      )
+    lazy val dateRange: PackratParser[Period] =
+      (  String~"-"~String ^^ {case date1~"-"~date2 => new Period(new DateTime(new SimpleDateFormat( "MM/dd/yyyy" ).parse(date1)),new DateTime(new SimpleDateFormat( "MM/dd/yyyy" ).parse(date2))) }
+      
+      )
+    lazy val filler: PackratParser[Filler] =
+      (  section~filler ^^ { case sec~f => new FillerSectionWithMore(sec, f) }
+         | event~filler ^^ { case ev~f => new FillerEventWithMore(ev, f) }
+         | section ^^ { case sec => new FillerSection(sec) }
+         | event ^^ { case ev => new FIllerEvent(ev) }
+      )
+      
+    lazy val section: PackratParser[Section] =
+      (  "section"~String~"{"~secform~"}" ^^ {case "section"~name~"{"~form~"}" => new SectionDef(name, form)} )
+    
+    
+    
     
     def word(s: String): Parser[String] = {
       val msg = if (s == "else") {

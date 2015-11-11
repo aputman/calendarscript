@@ -8,7 +8,6 @@ import calendarscript.ir._
 import java.io.File
 import scalafx.application.JFXApp
 import calendarscript.semantics._
-import picolib.maze.Maze
 import net.fortuna.ical4j.model._
 import net.fortuna.ical4j.model.component._
 import net.fortuna.ical4j.model.property._

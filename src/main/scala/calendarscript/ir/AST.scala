@@ -57,10 +57,11 @@ case class IncludesDef(dateRanges: DateRanges) extends Includes
 case class ExcludesDef(dateRanges: DateRanges) extends Excludes
 
 // By defining DateRanges this precisely, it will allow us to add more variants more easily in the future
-case class DateRangesSingleRange(dateRange: DateRange) extends DateRanges
-case class DateRangesMultipleRanges(dateRange: DateRange, rest: DateRanges) extends DateRanges
+case class DateRangesSingleRange(dateRange: Period) extends DateRanges
+case class DateRangesMultipleRanges(dateRange: Period, rest: DateRanges) extends DateRanges
 
 // Again, by defining this so specifically, we can add more representation later
+// TODO: MAYBE IMPLEMENT LATER
 case class DateRangeSingleDate(date: Date) extends DateRange
 case class DateRangeMultipleDates(startDate: Date, endDate: Date) extends DateRange
 
@@ -80,9 +81,11 @@ case class TimeOptionDaily(dailyTime: DailyTime) extends TimeOption
 case class TimeOptionWeekly(weeklyTime: WeeklyTime) extends TimeOption
 
 // By having these be their own AST defs, we can add more representations later
-case class DailyTimeDef(timeRange: TimeRange) extends DailyTime
-case class WeeklyTimeDef(timeRange: TimeRange, weekDates: WeekDays) extends WeeklyTime
+// FOR NOW, JUST MAKING THESE TIMEOPTIONS
+case class DailyTimeDef(startTime: DateTime, endTime: DateTime) extends TimeOption
+case class WeeklyTimeDef(startTime: DateTime, endTime: DateTime, weekDates: WeekDays) extends TimeOption
 
+// TODO: MAYBE IMPLEMENT THIS LATER
 case class TimeRangeSingleTime(time: Time) extends TimeRange
 case class TimeRangeMultipleTimes(startTime: Time, endTime: Time) extends TimeRange
 

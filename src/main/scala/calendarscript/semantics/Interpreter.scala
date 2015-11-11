@@ -82,7 +82,18 @@ class interpreter{
   }
   
   def evalDateRanges(ast: AST): PeriodList = {
-    
+    ast match {
+      case DateRangesSingleRange(dateRange: Period) => {
+        var pList = new PeriodList()
+        pList add dateRange
+        pList normalise
+      }
+      case DateRangesMultipleRanges(dateRange: Period, rest: DateRanges) => {
+        var pList = evalDateRanges(rest)
+        pList add dateRange
+        pList normalise
+      }
+    }
   }
   
   def evalFiller(ast: AST, periodListString: String): List[VEvent] = {
@@ -131,5 +142,41 @@ class interpreter{
     }
   }
   
+  def evalTimes(ast: AST): List[(DateTime, DateTime, Recur)] = {
+    ast match {
+      case TimeOptionsOne(option: TimeOption) => {
+        List(evalTime(option))
+      }
+      
+      case TimeOptionsMultiple(option: TimeOption, rest: TimeOptions) => {
+        evalTime(option) :: evalTimes(rest)
+      }
+    }
+  }
   
+  def evalTime(ast: AST): (DateTime, DateTime, Recur) = {
+    ast match {
+          case DailyTimeDef(startTime: DateTime, endTime: DateTime) => {
+            var recur = new Recur(Recur.DAILY)
+            (startTime, endTime, recur)
+          }
+          case WeeklyTimeDef(startTime: DateTime, endTime: DateTime, weekDates: WeekDays) => {
+            var recur = new Recur(Recur.WEEKLY)
+            var weekDayList = evalWeekDays(weekDates)
+            weekDayList.foreach { recur.getDayList().add(_) }
+            (startTime, endTime, recur)
+          }
+        }
+  }
+  
+  def evalWeekDays(ast: AST): List[WeekDay] = {
+    ast match {
+      case WeekDaysSingleDay(day: WeekDay) => {
+        List(day)
+      }
+      case WeekDaysMultipleDays(day: WeekDay, rest: WeekDays) => {
+        day :: evalWeekDays(rest)
+      }
+    }
+  }
 }

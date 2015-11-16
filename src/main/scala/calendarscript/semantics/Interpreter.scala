@@ -23,10 +23,9 @@ class interpreter{
     ast match {
       case CalendarDef(name: String, sectionForm: SectionForm) => {
         var events = evalSectionForm(sectionForm, periodList.toString())
-        
         // now add all the events to a calendar
         var cal = new net.fortuna.ical4j.model.Calendar();
-        events.foreach { cal.getComponents().add }
+        events.foreach { cal.getComponents() add _ }
         
         // return the calendar with its name
         return (name, cal)
@@ -53,29 +52,37 @@ class interpreter{
     var periodList = new PeriodList(periodListString)
     
     ast match {
-      case DatesIncludes(includes: Includes) => {
-        var addPeriods = evalDateRanges(includes)
-        periodList add addPeriods
-        periodList.normalise()
-        return periodList
+      case DatesIncludes(includes: Includes) => includes match {
+        case IncludesDef(dateRanges: DateRanges) => {
+          var addPeriods = evalDateRanges(dateRanges)
+          periodList add addPeriods
+          periodList.normalise()
+          return periodList
+        }
       }
-      case DatesExcludes(excludes: Excludes) => {
-        var subtractPeriods = evalDateRanges(excludes)
-        periodList subtract subtractPeriods
-        periodList.normalise()
-        return periodList
+      case DatesExcludes(excludes: Excludes) => excludes match {
+        case ExcludesDef(dateRanges: DateRanges) => {
+          var subtractPeriods = evalDateRanges(dateRanges)
+          periodList subtract subtractPeriods
+          periodList.normalise()
+          return periodList
+        }
       }
-      case DatesIncludesWithMore(includes: Includes, rest: Dates) => {
-        var addPeriods = evalDateRanges(includes)
-        periodList add addPeriods
-        periodList.normalise()
-        return evalDates(rest, periodList.toString())
+      case DatesIncludesWithMore(includes: Includes, rest: Dates) => includes match {
+        case IncludesDef(dateRanges: DateRanges) => {
+          var addPeriods = evalDateRanges(dateRanges)
+          periodList add addPeriods
+          periodList.normalise()
+          return evalDates(rest, periodList.toString())
+        }
       }
-      case DatesExcludesWithMore(excludes: Excludes, rest: Dates) => {
-        var subtractPeriods = evalDateRanges(excludes)
-        periodList subtract subtractPeriods
-        periodList.normalise()
-        return evalDates(rest, periodList.toString())
+      case DatesExcludesWithMore(excludes: Excludes, rest: Dates) => excludes match {
+        case ExcludesDef(dateRanges: DateRanges) => {
+          var subtractPeriods = evalDateRanges(dateRanges)
+          periodList subtract subtractPeriods
+          periodList.normalise()
+          return evalDates(rest, periodList.toString())
+        }
       }
     }
   }
@@ -134,9 +141,8 @@ class interpreter{
     var periodList = new PeriodList(periodListString)
     
     event match {
-      case EventDef(name: String, times: TimeOptions, otherFields: ExtraEventFields) => {
-        var evalTimes = List[(DateTime, DateTime, Recur)]()
-        ICalHelper.createVEvents(periodList, evalTimes)
+      case EventDef(name: String, times: TimeOptions) => {
+        ICalHelper.createVEvents(periodList, evalTimes(times))
       }
     }
   }
@@ -160,7 +166,11 @@ class interpreter{
             (startTime, endTime, recur)
           }
           case WeeklyTimeDef(startTime: DateTime, endTime: DateTime, weekDates: WeekDays) => {
-            var recur = new Recur(Recur.WEEKLY)
+            var untilCal = java.util.Calendar.getInstance()
+            untilCal.set(2015, java.util.Calendar.DECEMBER, 31); 
+            untilCal.set(java.util.Calendar.MILLISECOND, 0); 
+
+            var recur = new Recur(Recur.WEEKLY, untilCal.getTimeInMillis.toInt)
             var weekDayList = evalWeekDays(weekDates)
             weekDayList.foreach { recur.getDayList().add(_) }
             (startTime, endTime, recur)

@@ -52,7 +52,7 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
       (  "section"~string~"{"~secform~"}" ^^ {case "section"~name~"{"~form~"}" => new SectionDef(name, form)} )
     
     lazy val event: PackratParser[Event] = 
-      (  "event"~string~"{"~times~"}" ^^ {case "event"~name~"{"~times~"}" => new EventDef(name,times,null)})
+      (  "event"~string~"{"~times~"}" ^^ {case "event"~name~"{"~times~"}" => new EventDef(name,times)})
     
     lazy val times: PackratParser[TimeOptions] =
       (  "times"~"{"~multipletimes~"}" ^^ {case "times"~"{"~multipletimes~"}" => multipletimes } )

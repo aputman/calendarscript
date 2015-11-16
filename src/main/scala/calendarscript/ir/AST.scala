@@ -71,7 +71,7 @@ case class DateRangeMultipleDates(startDate: Date, endDate: Date) extends DateRa
 case class SectionDef(name: String, sectionForm: SectionForm) extends Section
 
 // Events must contain a time, can contain other event fields)
-case class EventDef(name: String, times: TimeOptions, otherFields: ExtraEventFields) extends Event
+case class EventDef(name: String, times: TimeOptions) extends Event
 
 case class TimeOptionsOne(option: TimeOption) extends TimeOptions
 case class TimeOptionsMultiple(option: TimeOption, rest: TimeOptions) extends TimeOptions

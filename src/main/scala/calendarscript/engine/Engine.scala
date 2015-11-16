@@ -26,6 +26,7 @@ object Engine extends interpreter {
       case CalendarParser.Success(t, _) ⇒ {
         println(t)
         var result = evalCal(t)
+        println(result)
       }
       case e: CalendarParser.NoSuccess  ⇒ println(e)
     }

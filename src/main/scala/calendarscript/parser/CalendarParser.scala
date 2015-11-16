@@ -27,10 +27,10 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
       )
     
     lazy val dates: PackratParser[Dates] =
-      (  "includes"~"("~dateRanges~")"~dates ^^ {case "includes"~"("~dRange~")"~d => new DatesIncludesWithMore(new IncludesDef(dRange), d)}
-        | "excludes"~"("~dateRanges~")"~dates ^^ {case "excludes"~"("~dRange~")"~d => new DatesExcludesWithMore(new ExcludesDef(dRange), d)}
-        | "includes"~"("~dateRanges~")" ^^ {case "includes"~"("~dRange~")" => new DatesIncludes(new IncludesDef(dRange))}
-        | "excludes"~"("~dateRanges~")" ^^ {case "excludes"~"("~dRange~")" => new DatesExcludes(new ExcludesDef(dRange))}
+      (  "includes"~"{"~dateRanges~"}"~dates ^^ {case "includes"~"{"~dRange~"}"~d => new DatesIncludesWithMore(new IncludesDef(dRange), d)}
+        | "excludes"~"{"~dateRanges~"}"~dates ^^ {case "excludes"~"{"~dRange~"}"~d => new DatesExcludesWithMore(new ExcludesDef(dRange), d)}
+        | "includes"~"{"~dateRanges~"}" ^^ {case "includes"~"{"~dRange~"}" => new DatesIncludes(new IncludesDef(dRange))}
+        | "excludes"~"{"~dateRanges~"}" ^^ {case "excludes"~"{"~dRange~"}" => new DatesExcludes(new ExcludesDef(dRange))}
       )
       
     lazy val dateRanges: PackratParser[DateRanges] =

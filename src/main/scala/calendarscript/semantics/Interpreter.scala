@@ -39,7 +39,7 @@ class interpreter{
     ast match {
       case SecFormContainsDates(dates: Dates, filler: Filler) => {
         var newPeriodList = evalDates(dates, periodList.toString())
-        
+        println(newPeriodList)
         return evalFiller(filler, newPeriodList.toString())
       }
       case SecFormWithOutDates(filler: Filler) => {
@@ -55,7 +55,7 @@ class interpreter{
       case DatesIncludes(includes: Includes) => includes match {
         case IncludesDef(dateRanges: DateRanges) => {
           var addPeriods = evalDateRanges(dateRanges)
-          periodList add addPeriods
+          periodList = periodList add addPeriods
           periodList.normalise()
           return periodList
         }
@@ -63,7 +63,7 @@ class interpreter{
       case DatesExcludes(excludes: Excludes) => excludes match {
         case ExcludesDef(dateRanges: DateRanges) => {
           var subtractPeriods = evalDateRanges(dateRanges)
-          periodList subtract subtractPeriods
+          periodList = periodList subtract subtractPeriods
           periodList.normalise()
           return periodList
         }
@@ -71,7 +71,7 @@ class interpreter{
       case DatesIncludesWithMore(includes: Includes, rest: Dates) => includes match {
         case IncludesDef(dateRanges: DateRanges) => {
           var addPeriods = evalDateRanges(dateRanges)
-          periodList add addPeriods
+          periodList = periodList add addPeriods
           periodList.normalise()
           return evalDates(rest, periodList.toString())
         }
@@ -79,7 +79,7 @@ class interpreter{
       case DatesExcludesWithMore(excludes: Excludes, rest: Dates) => excludes match {
         case ExcludesDef(dateRanges: DateRanges) => {
           var subtractPeriods = evalDateRanges(dateRanges)
-          periodList subtract subtractPeriods
+          periodList = periodList subtract subtractPeriods
           periodList.normalise()
           return evalDates(rest, periodList.toString())
         }
@@ -139,10 +139,11 @@ class interpreter{
   
   def evalEvent(event: Event, periodListString: String): List[VEvent] = {
     var periodList = new PeriodList(periodListString)
-    
     event match {
       case EventDef(name: String, times: TimeOptions) => {
-        ICalHelper.createVEvents(periodList, evalTimes(times))
+        var events = ICalHelper.createVEvents(periodList, evalTimes(times))
+        events.foreach { x => x.getProperties().add(new Summary(name))}
+        events
       }
     }
   }

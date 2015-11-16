@@ -1,24 +1,39 @@
 calendar schoolCal {
 
     dates {
-        includes ( 9/1/2015 - 12/17/2015 )
-        excludes (  10/15/2015 - 10/18/2015 ,
-                            11/25/2015 - 11/28/2015 )
+        includes { 9/1/2015 - 12/17/2015 }
+        excludes {  10/15/2015 - 10/18/2015 ,
+                    11/25/2015 - 11/28/2015 }
     }
 
     section classes {
 
         dates {
-            excludes ( 12/9/2015 - 12/17/2015 )
+            excludes { 12/9/2015 - 12/17/2015 }
         }
 
-        event math {
-            times { weekly( 10:00 - 11:00 MO , WE ) }
+        section secondhalfsemester {
+            dates {
+                excludes { 9/1/2015 - 10/18/2015 }
+            }
+
+            event stats {
+                times { weekly( 10:00 - 11:00 MO , WE ) }
+            }
         }
 
+        section firsthalfsemester {
+            dates {
+                excludes { 10/18/2015-12/17/2015 }
+            }
+
+            event calc {
+                times { weekly( 10:00 - 11:00 MO, WE )}
+            }
+        }
         event physics {
             times { weekly( 11:00 - 12:00 MO , WE ) ,
-                    weekly( 9:00 - 9:50 TU ) }
+                    weekly( 9:00 - 9:50 TU, TH ) }
         }
     }
 }

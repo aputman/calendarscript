@@ -1,6 +1,7 @@
 package calendarscript
 
 import scala.tools.nsc.EvalLoop
+
 import calendarscript._
 import calendarscript.parser._
 import calendarscript.ir._
@@ -25,8 +26,8 @@ object Engine extends interpreter {
     CalendarParser(lines) match {
       case CalendarParser.Success(t, _) ⇒ {
         println(t)
-        var result = evalCal(t)
-        println(result)
+        var (name, result) = evalCal(t)
+        scala.tools.nsc.io.File("resources" + File.separator + name +".ics").writeAll(result.toString())
       }
       case e: CalendarParser.NoSuccess  ⇒ println(e)
     }

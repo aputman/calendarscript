@@ -1,8 +1,7 @@
-package calendarscript.engine
+package calendarscript
 
 import scala.tools.nsc.EvalLoop
-import calendarscript.semantics.eval
-import calendarscript.interpreter
+import calendarscript._
 import calendarscript.parser._
 import calendarscript.ir._
 import java.io.File
@@ -21,25 +20,16 @@ object Engine extends interpreter {
 //      case e: PiconotParser.NoSuccess ⇒ println(e)
 //    }
 //  }
-    val lines = scala.io.Source.fromFile("resources" + File.separator + s"mazerunner.txt").mkString
-    val firstLineEnd = lines.indexOf("\n")
-    println(firstLineEnd, firstLineEnd)
-    val mazeName = lines.slice(0, firstLineEnd).trim
-    val newLine = lines.slice(firstLineEnd, lines.length())
-    PiconotParser(newLine) match {
-      case PiconotParser.Success(t, _) ⇒ {
+  def main(args: Array[String]) = {
+    val lines = scala.io.Source.fromFile("resources" + File.separator + s"test.cal").mkString
+    CalendarParser(lines) match {
+      case CalendarParser.Success(t, _) ⇒ {
         println(t)
-        eval(t)(mazeName)
+        var result = evalCal(t)
       }
-      case e: PiconotParser.NoSuccess  ⇒ println(e)
+      case e: CalendarParser.NoSuccess  ⇒ println(e)
     }
+  }
 }
 
-class Calendar(val name: String) {
-  var periodList:PeriodList = new PeriodList()
-  
-}
-class Section(val name: String, val superPeriodListString: String) {
-  var periodList:PeriodList = new PeriodList(superPeriodListString)
-  
-}
+

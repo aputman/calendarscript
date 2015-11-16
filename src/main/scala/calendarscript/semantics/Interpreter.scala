@@ -1,7 +1,7 @@
 package calendarscript
 
 /**
- * @author mvalentine
+ * @author aputman
  */
 
 import calendarscript.ir._

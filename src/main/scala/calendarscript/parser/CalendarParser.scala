@@ -16,6 +16,8 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
       parseAll(cal, s)
     }
     
+    var timeFormat = new SimpleDateFormat("HH:mm");
+    var dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     
     lazy val cal: PackratParser[Cal] = 
       (   "calendar"~string~"{"~secform~"}" ^^ {case "calendar"~name~"{"~form~"}" => new CalendarDef(name, form)} 
@@ -38,7 +40,7 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
         | dateRange ^^ {case dr => new DateRangesSingleRange(dr)}
       )
     lazy val dateRange: PackratParser[Period] =
-      (  string~"-"~string ^^ {case date1~"-"~date2 => new Period(new DateTime(new SimpleDateFormat( "MM/dd/yyyy" ).parse(date1)),new DateTime(new SimpleDateFormat( "MM/dd/yyyy" ).parse(date2))) }
+      (  string~"-"~string ^^ {case date1~"-"~date2 => new Period(new DateTime(dateFormat.parse(date1)), new DateTime(dateFormat.parse(date2))) }
       
       )
     lazy val filler: PackratParser[Filler] =
@@ -57,12 +59,18 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
     lazy val times: PackratParser[TimeOptions] =
       (  "times"~"{"~multipletimes~"}" ^^ {case "times"~"{"~multipletimes~"}" => multipletimes } )
          
-    lazy val singletime: PackratParser[TimeOption] = 
-      (  "weekly"~"("~number~":"~number ~ "-" ~ number~":"~number ~ weekdays~")" ^^ {case "weekly"~"("~h1~":"~m1 ~ "-" ~ h2~":"~m2 ~ weekdays~")" => new WeeklyTimeDef(new net.fortuna.ical4j.model.DateTime(h1*60*60*100 + m1*60*100), new net.fortuna.ical4j.model.DateTime(h2*60*60*100 + m2*60*100), weekdays)})
+    lazy val singletimeoption: PackratParser[TimeOption] = 
+      (  "weekly"~"("~timerange~weekdays~")" ^^ {case "weekly"~"("~timerange~ weekdays~")" => new WeeklyTimeDef(timerange, weekdays)})
+      
+    lazy val timerange: PackratParser[TimeRange] =
+      (  time ~ "-" ~ time ^^ {case  time1 ~ "-" ~ time2 => new TimeRangeMultipleTimes(time1, time2) })
+      
+    lazy val time: PackratParser[DateTime] =
+      (  timestring ^^ {case time1 => new DateTime(timeFormat.parse(time1))})
       
     lazy val multipletimes: PackratParser[TimeOptions] =
-      (  singletime~","~multipletimes ^^ {case s~","~m => new TimeOptionsMultiple(s, m)}
-      | singletime ^^ {case singletime => new TimeOptionsOne(singletime)})
+      (  singletimeoption~","~multipletimes ^^ {case s~","~m => new TimeOptionsMultiple(s, m)}
+      | singletimeoption ^^ {case singletime => new TimeOptionsOne(singletime)})
       
     lazy val weekdays: PackratParser[WeekDays] =
       (  day~","~weekdays ^^ {case d~","~rest => new WeekDaysMultipleDays(d, rest)} 
@@ -79,7 +87,7 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
          
     lazy val number: PackratParser[Int] = wholeNumber ^^ { s => s.toInt}
     def string: Parser[String] = """(\w+/*)+""".r
-
+    def timestring: Parser[String] = """(\w+:*)+""".r
     
      
  }

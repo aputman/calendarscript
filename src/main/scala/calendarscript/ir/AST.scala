@@ -17,7 +17,7 @@ sealed abstract class Includes extends AST
 sealed abstract class Excludes extends AST
 sealed abstract class DateRanges extends AST
 sealed abstract class DateRange extends AST
-sealed abstract class Date extends AST
+sealed abstract class CalDate extends AST
 sealed abstract class Event extends AST
 sealed abstract class ExtraEventFields extends AST
 sealed abstract class Times extends AST
@@ -26,7 +26,7 @@ sealed abstract class TimeOption extends AST
 sealed abstract class DailyTime extends AST
 sealed abstract class WeeklyTime extends AST
 sealed abstract class TimeRange extends AST
-sealed abstract class Time extends AST
+sealed abstract class CalTime extends AST
 sealed abstract class WeekDays extends AST
 
 // ++
@@ -82,12 +82,12 @@ case class TimeOptionWeekly(weeklyTime: WeeklyTime) extends TimeOption
 
 // By having these be their own AST defs, we can add more representations later
 // FOR NOW, JUST MAKING THESE TIMEOPTIONS
-case class DailyTimeDef(startTime: DateTime, endTime: DateTime) extends TimeOption
-case class WeeklyTimeDef(startTime: DateTime, endTime: DateTime, weekDates: WeekDays) extends TimeOption
+case class DailyTimeDef(timeRange: TimeRange) extends TimeOption
+case class WeeklyTimeDef(timeRange: TimeRange, weekDates: WeekDays) extends TimeOption
 
 // TODO: MAYBE IMPLEMENT THIS LATER
 case class TimeRangeSingleTime(time: Time) extends TimeRange
-case class TimeRangeMultipleTimes(startTime: Time, endTime: Time) extends TimeRange
+case class TimeRangeMultipleTimes(startTime: DateTime, endTime: DateTime) extends TimeRange
 
 // TODO: ADD IN TIME REPRESENTATION
 

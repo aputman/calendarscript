@@ -162,19 +162,23 @@ class interpreter{
   
   def evalTime(ast: AST): (DateTime, DateTime, Recur) = {
     ast match {
-          case DailyTimeDef(startTime: DateTime, endTime: DateTime) => {
-            var recur = new Recur(Recur.DAILY)
-            (startTime, endTime, recur)
+          case DailyTimeDef(timerange: TimeRange) => timerange match {
+            case TimeRangeMultipleTimes(time1: DateTime, time2: DateTime) => {
+              var recur = new Recur(Recur.DAILY)
+              (time1, time2, recur)
+            }
           }
-          case WeeklyTimeDef(startTime: DateTime, endTime: DateTime, weekDates: WeekDays) => {
-            var untilCal = java.util.Calendar.getInstance()
-            untilCal.set(2015, java.util.Calendar.DECEMBER, 31); 
-            untilCal.set(java.util.Calendar.MILLISECOND, 0); 
-
-            var recur = new Recur(Recur.WEEKLY, untilCal.getTimeInMillis.toInt)
-            var weekDayList = evalWeekDays(weekDates)
-            weekDayList.foreach { recur.getDayList().add(_) }
-            (startTime, endTime, recur)
+          case WeeklyTimeDef(timerange: TimeRange, weekDates: WeekDays) => timerange match {
+            case TimeRangeMultipleTimes(time1: DateTime, time2: DateTime) => {
+              var untilCal = java.util.Calendar.getInstance()
+              untilCal.set(2015, java.util.Calendar.DECEMBER, 31); 
+              untilCal.set(java.util.Calendar.MILLISECOND, 0); 
+  
+              var recur = new Recur(Recur.WEEKLY, untilCal.getTimeInMillis.toInt)
+              var weekDayList = evalWeekDays(weekDates)
+              weekDayList.foreach { recur.getDayList().add(_) }
+              (time1, time2, recur)
+            }
           }
         }
   }

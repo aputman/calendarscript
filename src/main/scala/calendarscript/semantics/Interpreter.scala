@@ -16,7 +16,7 @@ class interpreter{
   
   case class RulesDontMakeSense(msg: String) extends Exception(msg)
   
-  def evalCal(ast: Cal): (String, net.fortuna.ical4j.model.Calendar) = {
+  def evalCal(ast: AST): (String, net.fortuna.ical4j.model.Calendar) = {
           
     var periodList:PeriodList = new PeriodList()
     

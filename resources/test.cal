@@ -18,7 +18,7 @@ calendar schoolCal {
             }
 
             event stats {
-                times { weekly( 10:00 - 11:00 MO , WE ) }
+                times { weekly( 10:00am - 11:00am MO , WE ) }
             }
         }
 
@@ -28,12 +28,12 @@ calendar schoolCal {
             }
 
             event calc {
-                times { weekly( 10:00 - 11:00 MO, WE )}
+                times { weekly( 10:00am - 11:00am MO, WE )}
             }
         }
         event physics {
-            times { weekly( 11:00 - 12:00 MO , WE ) ,
-                    weekly( 9:00 - 9:50 TU, TH ) }
+            times { weekly( 11:00am - 1:00pm MO , WE ) ,
+                    weekly( 9:00am - 9:50am TU, TH ) }
         }
     }
 }

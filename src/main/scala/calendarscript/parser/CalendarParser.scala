@@ -16,7 +16,7 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
       parseAll(cal, s)
     }
     
-    var timeFormat = new SimpleDateFormat("hh:mm a");
+    var timeFormat = new SimpleDateFormat("hh:mma");
     var dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     
     lazy val cal: PackratParser[Cal] = 

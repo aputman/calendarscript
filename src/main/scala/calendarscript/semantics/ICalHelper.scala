@@ -20,7 +20,7 @@ object ICalHelper {
             var periodEnd = period.getEnd
             periodStart.setHours(startTime.getHours)
             periodStart.setMinutes(startTime.getMinutes)
-            
+            periodStart.setUtc(false)
             var newDates = recur.getDates(periodStart, periodEnd, Value.DATE_TIME)
             if (totalDates == null) {
                 totalDates = newDates

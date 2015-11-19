@@ -16,7 +16,7 @@ class interpreter{
   
   case class RulesDontMakeSense(msg: String) extends Exception(msg)
   
-  def evalCal(ast: AST): (String, net.fortuna.ical4j.model.Calendar) = {
+  def evalCal(ast: Cal): (String, net.fortuna.ical4j.model.Calendar) = {
           
     var periodList:PeriodList = new PeriodList()
     
@@ -33,7 +33,7 @@ class interpreter{
     }
   }
   
-  def evalSectionForm(ast: AST, periodListString: String): List[VEvent] = {
+  def evalSectionForm(ast: SectionForm, periodListString: String): List[VEvent] = {
     var periodList = new PeriodList(periodListString)
     
     ast match {
@@ -87,7 +87,7 @@ class interpreter{
     }
   }
   
-  def evalDateRanges(ast: AST): PeriodList = {
+  def evalDateRanges(ast: DateRanges): PeriodList = {
     ast match {
       case DateRangesSingleRange(dateRange: Period) => {
         var pList = new PeriodList()
@@ -102,7 +102,7 @@ class interpreter{
     }
   }
   
-  def evalFiller(ast: AST, periodListString: String): List[VEvent] = {
+  def evalFiller(ast: Filler, periodListString: String): List[VEvent] = {
     var periodList = new PeriodList(periodListString)
     
     ast match {
@@ -127,7 +127,7 @@ class interpreter{
     }
   }
   
-  def evalSection(ast: AST, periodListString: String): List[VEvent] = {
+  def evalSection(ast: Section, periodListString: String): List[VEvent] = {
     var periodList = new PeriodList(periodListString)
     
     ast match {
@@ -148,7 +148,7 @@ class interpreter{
     }
   }
   
-  def evalTimes(ast: AST): List[(DateTime, DateTime, Recur)] = {
+  def evalTimes(ast: TimeOptions): List[(DateTime, DateTime, Recur)] = {
     ast match {
       case TimeOptionsOne(option: TimeOption) => {
         List(evalTime(option))
@@ -160,7 +160,7 @@ class interpreter{
     }
   }
   
-  def evalTime(ast: AST): (DateTime, DateTime, Recur) = {
+  def evalTime(ast: TimeOption): (DateTime, DateTime, Recur) = {
     ast match {
           case DailyTimeDef(timerange: TimeRange) => timerange match {
             case TimeRangeMultipleTimes(time1: DateTime, time2: DateTime) => {
@@ -183,7 +183,7 @@ class interpreter{
         }
   }
   
-  def evalWeekDays(ast: AST): List[WeekDay] = {
+  def evalWeekDays(ast: WeekDays): List[WeekDay] = {
     ast match {
       case WeekDaysSingleDay(day: WeekDay) => {
         List(day)

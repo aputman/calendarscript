@@ -77,8 +77,8 @@ case class TimeOptionsOne(option: TimeOption) extends TimeOptions
 case class TimeOptionsMultiple(option: TimeOption, rest: TimeOptions) extends TimeOptions
 
 // Time option can be added to, but for now, only daily and weekly
-case class TimeOptionDaily(dailyTime: DailyTime) extends TimeOption
-case class TimeOptionWeekly(weeklyTime: WeeklyTime) extends TimeOption
+//case class TimeOptionDaily(dailyTime: DailyTime) extends TimeOption
+//case class TimeOptionWeekly(weeklyTime: WeeklyTime) extends TimeOption
 
 // By having these be their own AST defs, we can add more representations later
 // FOR NOW, JUST MAKING THESE TIMEOPTIONS
@@ -86,7 +86,7 @@ case class DailyTimeDef(timeRange: TimeRange) extends TimeOption
 case class WeeklyTimeDef(timeRange: TimeRange, weekDates: WeekDays) extends TimeOption
 
 // TODO: MAYBE IMPLEMENT THIS LATER
-case class TimeRangeSingleTime(time: Time) extends TimeRange
+//case class TimeRangeSingleTime(time: Time) extends TimeRange
 case class TimeRangeMultipleTimes(startTime: DateTime, endTime: DateTime) extends TimeRange
 
 // TODO: ADD IN TIME REPRESENTATION

@@ -40,8 +40,8 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
         | dateRange ^^ {case dr => new DateRangesSingleRange(dr)}
       )
     lazy val dateRange: PackratParser[Period] =
-      (  string~"-"~string ^^ {case date1~"-"~date2 => new Period(new DateTime(dateFormat.parse(date1)), new DateTime(dateFormat.parse(date2))) }
-      
+      (  datestring~"-"~datestring ^^ {case date1~"-"~date2 => new Period(new DateTime(dateFormat.parse(date1)), new DateTime(dateFormat.parse(date2))) }
+        | datestring ^^ {case date1 => new Period(new DateTime(dateFormat.parse(date1)), new DateTime(dateFormat.parse(date1)))}
       )
     lazy val filler: PackratParser[Filler] =
       (  section~filler ^^ { case sec~f => new FillerSectionWithMore(sec, f) }
@@ -86,7 +86,8 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
          | "SA" ^^ {case a => WeekDay.SA}  )
          
     lazy val number: PackratParser[Int] = wholeNumber ^^ { s => s.toInt}
-    def string: Parser[String] = """(\w+/*)+""".r
+    def string: Parser[String] = """(\w+-*)+""".r
+    def datestring: Parser[String] = """(\w+/*)+""".r
     def charstring: Parser[String] = """(\w+:*)+""".r
     def wholenum: Parser[Int] = wholeNumber ^^ {case s => s.toInt}
     def timestring: Parser[String] = """(\w+:*)+""".r

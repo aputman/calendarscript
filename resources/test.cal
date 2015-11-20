@@ -1,7 +1,7 @@
 calendar schoolCal {
 
     dates {
-        includes { 9/1/2015 - 12/17/2015 }
+        includes { 9/1/15 - 12/17/2015 }
         excludes {  10/15/2015 - 10/18/2015 ,
                     11/25/2015 - 11/28/2015 }
     }

@@ -22,7 +22,7 @@ object Engine extends interpreter {
 //    }
 //  }
   def main(args: Array[String]) = {
-    val lines = scala.io.Source.fromFile("resources" + File.separator + s"test.cal").mkString
+    val lines = scala.io.Source.fromFile("resources" + File.separator + s"2016calTest.cal").mkString
     CalendarParser(lines) match {
       case CalendarParser.Success(t, _) ⇒ {
         println(t)

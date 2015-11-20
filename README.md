@@ -77,10 +77,14 @@ calendar school-calendar {
 	}
 
 	section finals {
-		dates {
-			includes { 5/9/2016 - 5/13/2016 }
-		}
-	}
+	        dates {
+	        	includes { 5/2/2016 - 5/6/2016 }
+	        }
+
+	        event senior-finals {
+	        	times { weekly(8:00am - 5:00pm TH, FR)}
+	        }
+    }
 }
 ```
 

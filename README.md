@@ -29,44 +29,57 @@ of his classes:
 
 ```
 calendar school-calendar {
-	
-	dates {
-		includes { 9/1/15 - 12/17/15 }
-		excludes { 	10/15/15 - 10/18/15,
-					11/25/15 - 11/28/15 }
-	}
 
 	section classes {
 
 		dates {
-			excludes { 12/9/15 - 12/17/15 }
+			includes { 1/19/16 - 5/4/16 }
+			excludes { 	3/11/16 - 3/20/16,
+						3/25/16 }
 		}
-
-		event math {
-			times { weekly( 10:00am - 11:00am Mon, Wed ) }
+		
+		section mudd-classes {
+			
+			dates {
+				excludes { 5/1/2016 - 5/4/2016 }
+			}
+			event algorithms {
+				times { weekly( 11:00am - 12:15pm MO, WE ) }
+			}
+	
+			event interaction-design {
+				times {	weekly( 9:35am - 10:50am TU, TH) }
+			}
+			
+			event macroeconomics {
+				times { weekly( 2:45pm - 4pm MO, WE) }
+			}
+	
+			event clinic {
+				times { weekly( 11am - 12:15pm TU) }
+			}
+			
+			event colloquium {
+				times { weekly( 4:15pm - 5:30pm TH) }
+			}
 		}
-
-		event physics {
-			times {	weekly( 11:00am - 12:00pm Mon, Wed) ,
-					weekly( 9:00am - 9:50am Tues) }
-		}
-
-		event art {
-			times { weekly( 1pm - 3pm Tues, Thur) }
+		
+		section other-5c-classes {
+			
+			event intro-to-acting {
+				times { weekly(1:15pm - 3:45pm TU, TH) }
+			}
+			
+			event squash {
+				times { weekly(9am - 9:45am MO, WE) }
+			}
 		}
 	}
 
 	section finals {
 		dates {
-			excludes { 9/1/15 - 12/9/15 }
+			includes { 5/9/16 - 5/13/16 }
 		}
-
-		...
-	}
-
-	event payBills {
-		times { monthly( 2pm - 3pm 30th) }
-		type: individual
 	}
 }
 ```

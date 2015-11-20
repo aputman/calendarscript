@@ -33,9 +33,9 @@ calendar school-calendar {
 	section classes {
 
 		dates {
-			includes { 1/19/16 - 5/4/16 }
-			excludes { 	3/11/16 - 3/20/16,
-						3/25/16 }
+			includes { 1/19/2016 - 5/4/2016 }
+			excludes { 	3/11/2016 - 3/20/2016,
+						3/25/2016 }
 		}
 		
 		section mudd-classes {
@@ -78,7 +78,7 @@ calendar school-calendar {
 
 	section finals {
 		dates {
-			includes { 5/9/16 - 5/13/16 }
+			includes { 5/9/2016 - 5/13/2016 }
 		}
 	}
 }

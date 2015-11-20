@@ -52,11 +52,11 @@ calendar school-calendar {
 			}
 			
 			event macroeconomics {
-				times { weekly( 2:45pm - 4pm MO, WE) }
+				times { weekly( 2:45pm - 4:00pm MO, WE) }
 			}
 	
 			event clinic {
-				times { weekly( 11am - 12:15pm TU) }
+				times { weekly( 11:00am - 12:15pm TU) }
 			}
 			
 			event colloquium {
@@ -71,7 +71,7 @@ calendar school-calendar {
 			}
 			
 			event squash {
-				times { weekly(9am - 9:45am MO, WE) }
+				times { weekly(9:00am - 9:45am MO, WE) }
 			}
 		}
 	}

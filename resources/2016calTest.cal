@@ -14,7 +14,7 @@ calendar school-calendar {
                 excludes { 5/1/2016 - 5/4/2016 }
             }
             event algorithms {
-                times { weekly( 11:00am - 12:15pm MO, WE ) }
+                times { weekly( 11:00am - 12:15pm MO, WE, FR ) }
             }
 
             event interaction-design {

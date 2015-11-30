@@ -40,8 +40,8 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
         | dateRange ^^ {case dr => new DateRangesSingleRange(dr)}
       )
     lazy val dateRange: PackratParser[Period] =
-      (  datestring~"-"~datestring ^^ {case date1~"-"~date2 => new Period(new DateTime(dateFormat.parse(date1)), new DateTime(dateFormat.parse(date2))) }
-        | datestring ^^ {case date1 => new Period(new DateTime(dateFormat.parse(date1)), new DateTime(dateFormat.parse(date1)))}
+      (  datestring~"-"~datestring ^^ {case date1~"-"~date2 => new Period(DateFromString(date1), NextDateFromString(date2)) }
+        | datestring ^^ {case date1 => new Period(DateFromString(date1), NextDateFromString(date1))}
       )
     lazy val filler: PackratParser[Filler] =
       (  section~filler ^^ { case sec~f => new FillerSectionWithMore(sec, f) }
@@ -92,5 +92,16 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
     def wholenum: Parser[Int] = wholeNumber ^^ {case s => s.toInt}
     def timestring: Parser[String] = """(\w+:*)+""".r
     
-     
+    def DateFromString(day: String): DateTime = {
+      new DateTime(dateFormat.parse(day))
+    }
+    
+    def NextDateFromString(day: String): DateTime = {
+      var date = dateFormat.parse(day)
+      
+      var cal = java.util.Calendar.getInstance()
+      cal.setTime(date);
+      cal.add(java.util.Calendar.DATE, 1); //minus number would decrement the days
+      new DateTime(cal.getTime())
+    }
  }

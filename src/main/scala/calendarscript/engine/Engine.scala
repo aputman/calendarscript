@@ -22,12 +22,16 @@ object Engine extends interpreter {
 //    }
 //  }
   def main(args: Array[String]) = {
-    val lines = scala.io.Source.fromFile("resources" + File.separator + s"2016calTest.cal").mkString
+    
+    val inputFileLoc = args(0)
+    val outputFolderLoc = args(1)
+    
+    val lines = scala.io.Source.fromFile(inputFileLoc).mkString
     CalendarParser(lines) match {
       case CalendarParser.Success(t, _) ⇒ {
         println(t)
         var (name, result) = evalCal(t)
-        scala.tools.nsc.io.File("resources" + File.separator + name +".ics").writeAll(result.toString())
+        scala.tools.nsc.io.File(outputFolderLoc + File.separator + name +".ics").writeAll(result.toString())
       }
       case e: CalendarParser.NoSuccess  ⇒ println(e)
     }

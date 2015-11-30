@@ -31,7 +31,7 @@ object ICalHelper {
           }
         }
         var rdate = new RDate(totalDates)
-        println(rdate)
+
         var newEvent = new VEvent()
         newEvent.getProperties().add(rdate)
         newEvent.getProperties().add(new DtStart(startTime))

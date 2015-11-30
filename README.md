@@ -24,6 +24,22 @@ More simply CalendarScript is designed to allow users to:
 
 ---
 
+## Running DSL
+
+To run this program, scala and sbt are currently required. Here are the steps 
+
+1. Download and install scala and sbt. 
+2. run ```sbt``` in the parent foler of this project.
+3. run program (will go into more later) with 2 command line arguments:
+  1. the file (including location) of the calendarscript file
+  2. the folder location that your resulting ical file will be saved. 
+
+The name of the resulting file will be the name that you gave your calendar. 
+
+---
+
+## Example
+
 Here is an example of CalendarScript for a student that only wants a simple schedule
 of his classes:
 

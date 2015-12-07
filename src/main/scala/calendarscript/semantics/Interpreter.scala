@@ -16,7 +16,40 @@ class interpreter{
   
   case class RulesDontMakeSense(msg: String) extends Exception(msg)
   
-  def evalCal(ast: AST): (String, net.fortuna.ical4j.model.Calendar) = {
+  def evalRCal(ast: AST): (String, net.fortuna.ical4j.model.Calendar) = {
+    ast match {
+      case RCalWSettings(settings: Settings, cal: Cal) => {
+        evalSettings(settings)
+        evalCal(cal)
+      }
+      case RCalWOSettings(cal: Cal) => {
+        evalCal(cal)
+      }
+    }
+  }
+  
+  def evalSettings(ast: Settings) {
+    ast match {
+      case MultipleSettings(first: Setting, rest: Settings) => {
+        evalSetting(first)
+        evalSettings(rest)
+      }
+      case SingleSetting(first: Setting) => {
+        evalSetting(first)
+      }
+    }
+  }
+  
+  // No settings do anything in the interpreter currently, but this has
+  // been implemented for ease in future development.
+  def evalSetting(ast: Setting) {
+    ast match {
+      case TimeSetting(rep: String) => {}
+      case DateSetting(rep: String) => {}
+    }
+  }
+  
+  def evalCal(ast: Cal): (String, net.fortuna.ical4j.model.Calendar) = {
           
     var periodList:PeriodList = new PeriodList()
     
@@ -161,19 +194,19 @@ class interpreter{
   }
   
   def evalTime(ast: TimeOption): (DateTime, DateTime, Recur) = {
+    var untilCal = java.util.Calendar.getInstance()
+    untilCal.set(2015, java.util.Calendar.DECEMBER, 31); 
+    untilCal.set(java.util.Calendar.MILLISECOND, 0); 
+    
     ast match {
           case DailyTimeDef(timerange: TimeRange) => timerange match {
             case TimeRangeMultipleTimes(time1: DateTime, time2: DateTime) => {
-              var recur = new Recur(Recur.DAILY)
+              var recur = new Recur(Recur.DAILY, untilCal.getTimeInMillis.toInt)
               (time1, time2, recur)
             }
           }
           case WeeklyTimeDef(timerange: TimeRange, weekDates: WeekDays) => timerange match {
             case TimeRangeMultipleTimes(time1: DateTime, time2: DateTime) => {
-              var untilCal = java.util.Calendar.getInstance()
-              untilCal.set(2015, java.util.Calendar.DECEMBER, 31); 
-              untilCal.set(java.util.Calendar.MILLISECOND, 0); 
-  
               var recur = new Recur(Recur.WEEKLY, untilCal.getTimeInMillis.toInt)
               var weekDayList = evalWeekDays(weekDates)
               weekDayList.foreach { recur.getDayList().add(_) }

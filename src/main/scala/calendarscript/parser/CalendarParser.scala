@@ -13,12 +13,35 @@ import net.fortuna.ical4j.model.property._
 object CalendarParser extends JavaTokenParsers with PackratParsers {
     // parsing interface
     def apply(s: String): ParseResult[AST] = {
-      parseAll(cal, s)
+      parseAll(rcal, s)
     }
     
     var timeFormat = new SimpleDateFormat("hh:mma");
     var dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     
+    lazy val rcal: PackratParser[RCal] =
+      (  settings~cal ^^ {case settings~cal => new RCalWSettings(settings, cal) }
+         | cal ^^ {case cal => new RCalWOSettings(cal) }
+      )
+      
+    lazy val settings: PackratParser[Settings] = 
+      (  "settings"~"{"~unlimitedSettings~"}" ^^ {case "settings"~"{"~unlimitedSettings~"}" => unlimitedSettings }
+      )
+      
+    lazy val unlimitedSettings: PackratParser[Settings] =
+      (  setting~","~unlimitedSettings ^^ {case setting~","~rest => new MultipleSettings(setting, rest) }
+         | setting ^^ {case setting => new SingleSetting(setting) }
+      )
+      
+    lazy val setting: PackratParser[Setting] = 
+      (  "times"~":"~settingstring ^^ {case "times"~":"~string => timeFormat = new SimpleDateFormat(string); new TimeSetting(string) }
+         | "dates"~":"~settingstring ^^ {case "dates"~":"~string => dateFormat = new SimpleDateFormat(string); new DateSetting(string) }
+      )
+    
+    lazy val settingstring: PackratParser[String] = 
+      (  "\""~settingstringRegex~"\"" ^^ {case "\""~string~"\"" => string }
+      )
+     
     lazy val cal: PackratParser[Cal] = 
       (   "calendar"~string~"{"~secform~"}" ^^ {case "calendar"~name~"{"~form~"}" => new CalendarDef(name, form)} 
       )
@@ -60,7 +83,9 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
       (  "times"~"{"~multipletimes~"}" ^^ {case "times"~"{"~multipletimes~"}" => multipletimes } )
          
     lazy val singletimeoption: PackratParser[TimeOption] = 
-      (  "weekly"~"("~timerange~weekdays~")" ^^ {case "weekly"~"("~timerange~ weekdays~")" => new WeeklyTimeDef(timerange, weekdays)})
+      (  "weekly"~"("~timerange~weekdays~")" ^^ {case "weekly"~"("~timerange~ weekdays~")" => new WeeklyTimeDef(timerange, weekdays)}
+         | "daily"~"("~timerange~")" ^^ {case "daily"~"("~timerange~")" => new DailyTimeDef(timerange)}
+      )
       
     lazy val timerange: PackratParser[TimeRange] =
       (  time ~ "-" ~ time ^^ {case  time1 ~ "-" ~ time2 => new TimeRangeMultipleTimes(time1, time2) })
@@ -87,10 +112,12 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
          
     lazy val number: PackratParser[Int] = wholeNumber ^^ { s => s.toInt}
     def string: Parser[String] = """(\w+-*)+""".r
-    def datestring: Parser[String] = """(\w+/*)+""".r
+    def datestring: Parser[String] = dateFormat.toPattern().replaceAll("MM", """\\d+""").replaceAll("dd", """\\d+""").replaceAll("yyyy", """\\d+""").r   //"""(\w+/*)+""".r
     def charstring: Parser[String] = """(\w+:*)+""".r
+    
+    def settingstringRegex: Parser[String] = """[^"]+""".r
     def wholenum: Parser[Int] = wholeNumber ^^ {case s => s.toInt}
-    def timestring: Parser[String] = """(\w+:*)+""".r
+    def timestring: Parser[String] = timeFormat.toPattern().replaceAll("hh", """\\d+""").replaceAll("mm", """\\d+""").replaceAll("a", """\\w\\w""").r  //"""(\w+:*)+""".r
     
     def DateFromString(day: String): DateTime = {
       new DateTime(dateFormat.parse(day))

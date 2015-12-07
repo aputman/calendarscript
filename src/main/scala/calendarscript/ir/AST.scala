@@ -7,7 +7,9 @@ package calendarscript.ir
 import net.fortuna.ical4j.model._
 
 sealed abstract class AST
-//sealed abstract class Expr extends AST
+sealed abstract class RCal extends AST
+sealed abstract class Settings extends AST
+sealed abstract class Setting extends AST
 sealed abstract class SectionForm extends AST
 sealed abstract class Cal extends AST
 sealed abstract class Filler extends AST
@@ -29,8 +31,20 @@ sealed abstract class TimeRange extends AST
 sealed abstract class CalTime extends AST
 sealed abstract class WeekDays extends AST
 
+// Top level, defines if the calendar contains settings or not
+case class RCalWSettings(settings: Settings, cal: Cal) extends RCal
+case class RCalWOSettings(cal: Cal) extends RCal
+
+// Settings are implied, but can be changed by the user
+case class MultipleSettings(first: Setting, rest: Settings) extends Settings
+case class SingleSetting(first: Setting) extends Settings
+
+// Settings options are for time representation and date representation
+case class TimeSetting(rep: String) extends Setting
+case class DateSetting(rep: String) extends Setting
+
 // ++
-// Top level, every calendarscript must contain a CalendarDef
+// every calendarscript must contain a CalendarDef
 case class CalendarDef(name: String, sectionForm: SectionForm) extends Cal
 
 // ++

@@ -30,7 +30,7 @@ object Engine extends interpreter {
     CalendarParser(lines) match {
       case CalendarParser.Success(t, _) ⇒ {
         println(t)
-        var (name, result) = evalCal(t)
+        var (name, result) = evalRCal(t)
         scala.tools.nsc.io.File(outputFolderLoc + File.separator + name +".ics").writeAll(result.toString())
       }
       case e: CalendarParser.NoSuccess  ⇒ println(e)

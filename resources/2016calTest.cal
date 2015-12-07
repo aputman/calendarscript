@@ -1,3 +1,8 @@
+settings {
+	times: "hh:mm a",
+	dates: "MM/dd/yyyy"
+}
+
 calendar school-calendar {
 
     section classes {
@@ -14,45 +19,45 @@ calendar school-calendar {
                 excludes { 5/1/2016 - 5/4/2016 }
             }
             event algorithms {
-                times { weekly( 11:00am - 12:15pm MO, WE, FR ) }
+                times { weekly( 11:00 am - 12:15 pm MO, WE, FR ) }
             }
 
             event interaction-design {
-                times { weekly( 9:35am - 10:50am TU, TH) }
+                times { weekly( 9:35 am - 10:50 am TU, TH) }
             }
 
             event macroeconomics {
-                times { weekly( 2:45pm - 4:00pm MO, WE) }
+                times { weekly( 2:45 pm - 4:00 pm MO, WE) }
             }
 
             event clinic {
-                times { weekly( 11:00am - 12:15pm TU) }
+                times { weekly( 11:00 am - 12:15 pm TU) }
             }
 
             event colloquium {
-                times { weekly( 4:15pm - 5:30pm TH) }
+                times { weekly( 4:15 pm - 5:30 pm TH) }
             }
         }
 
         section other-5c-classes {
 
             event intro-to-acting {
-                times { weekly(1:15pm - 3:45pm TU, TH) }
+                times { weekly(1:15 pm - 3:45 pm TU, TH) }
             }
 
             event squash {
-                times { weekly(9:00am - 9:45am MO, WE) }
+                times { weekly(9:00 am - 9:45 am MO, WE) }
             }
         }
     }
 
     section finals {
         dates {
-            includes { 5/2/2016 - 5/6/2016 }
+            includes { 5/9/2016 - 5/14/2016 }
         }
 
         event senior-finals {
-            times { weekly(8:00am - 5:00pm TH, FR)}
+            times { daily(8:00 am - 5:00 pm)}
         }
     }
 }

@@ -1,7 +1,7 @@
 package calendarscript.ir
 
 /**
- * @author mvalentine
+ * @author aputman
  */
 object sugar {
   

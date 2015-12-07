@@ -1,6 +1,6 @@
 settings {
-	times: "hh:mm a",
-	dates: "MM/dd/yyyy"
+	time-format: "hh:mm a",
+	date-format: "MM/dd/yyyy"
 }
 
 calendar school-calendar {

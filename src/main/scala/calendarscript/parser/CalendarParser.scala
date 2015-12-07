@@ -34,8 +34,8 @@ object CalendarParser extends JavaTokenParsers with PackratParsers {
       )
       
     lazy val setting: PackratParser[Setting] = 
-      (  "times"~":"~settingstring ^^ {case "times"~":"~string => timeFormat = new SimpleDateFormat(string); new TimeSetting(string) }
-         | "dates"~":"~settingstring ^^ {case "dates"~":"~string => dateFormat = new SimpleDateFormat(string); new DateSetting(string) }
+      (  "time-format"~":"~settingstring ^^ {case "time-format"~":"~string => timeFormat = new SimpleDateFormat(string); new TimeSetting(string) }
+         | "date-format"~":"~settingstring ^^ {case "date-format"~":"~string => dateFormat = new SimpleDateFormat(string); new DateSetting(string) }
       )
     
     lazy val settingstring: PackratParser[String] = 

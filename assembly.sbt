@@ -6,6 +6,8 @@ jarName in assembly := "RCal.jar"
 
 val meta = """META.INF(.)*""".r
 
+outputPath in assembly := (outputPath in assembly).value.getParentFile / "../../" / (jarName in assembly).value
+
 mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
   {
     case PathList("javax", "servlet", xs @ _*)         => MergeStrategy.first

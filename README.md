@@ -26,7 +26,22 @@ More simply CalendarScript is designed to allow users to:
 
 ## Running DSL
 
-To run this program, scala and sbt are currently required. Here are the steps 
+### From Jar
+
+The easiest way to run this program is to [download the jar file](https://github.com/aputman/calendarscript/blob/master/RCal.jar?raw=true).
+
+This requires Java, but after downloading, all you need to do is run
+
+```java -jar RCal.java arg1 arg2```
+
+with the 2 command line arguments being:
+
+1. the file (including location) of the calendarscript file (```path\to\file.cal```)
+2. the folder location that your resulting ical file will be saved (```path\to\folder\```)
+
+### From the source code
+
+To run this program from the source, scala and sbt are currently required. Here are the steps 
 
 1. Download and install scala and sbt. 
 2. run ```sbt``` in the parent foler of this project.

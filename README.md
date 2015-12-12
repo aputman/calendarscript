@@ -28,7 +28,7 @@ More simply CalendarScript is designed to allow users to:
 
 ### From Website
 
-The easiest way to run a calendarscript is to input it into [this web app](https://www.aputman.com/rcal).
+The easiest way to run a calendarscript is to input it into [this web app](http://www.aputman.com/rcal).
 After running it there, it will just save an ical file on your computer. 
 
 ### From Jar

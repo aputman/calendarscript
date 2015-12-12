@@ -26,9 +26,14 @@ More simply CalendarScript is designed to allow users to:
 
 ## Running DSL
 
+### From Website
+
+The easiest way to run a calendarscript is to input it into [this web app](http://www.aputman.com/rcal).
+After running it there, it will just save an ical file on your computer. 
+
 ### From Jar
 
-The easiest way to run this program is to [download the jar file](https://github.com/aputman/calendarscript/blob/master/RCal.jar?raw=true).
+The 2nd easiest way to run this program is to [download the jar file](https://github.com/aputman/calendarscript/blob/master/RCal.jar?raw=true).
 
 This requires Java, but after downloading, all you need to do is run
 

@@ -14,15 +14,25 @@ import net.fortuna.ical4j.model._
 
 object Engine extends interpreter {
   def main(args: Array[String]) = {
-    val inputFileLoc = args(0)
-    val outputFolderLoc = args(1)
-    
-    val lines = scala.io.Source.fromFile(inputFileLoc).mkString
+    val firstArg = args(0)
+    val secondArg = args(1)
+    var lines = "";
+    if (firstArg == "-raw") {
+      lines = secondArg;
+    }
+    else {
+      lines = scala.io.Source.fromFile(firstArg).mkString
+    }
     CalendarParser(lines) match {
       case CalendarParser.Success(t, _) ⇒ {
-        println(t)
+        
         var (name, result) = evalRCal(t)
-        scala.tools.nsc.io.File(outputFolderLoc + File.separator + name +".ics").writeAll(result.toString())
+        if (firstArg == "-raw") {
+          println(result.toString())
+        }
+        else {
+          scala.tools.nsc.io.File(secondArg + File.separator + name +".ics").writeAll(result.toString())
+        }
       }
       case e: CalendarParser.NoSuccess  ⇒ println(e)
     }

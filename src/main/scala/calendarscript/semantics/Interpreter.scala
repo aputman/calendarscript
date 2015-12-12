@@ -72,7 +72,6 @@ class interpreter{
     ast match {
       case SecFormContainsDates(dates: Dates, filler: Filler) => {
         var newPeriodList = evalDates(dates, periodList.toString())
-        println(newPeriodList)
         return evalFiller(filler, newPeriodList.toString())
       }
       case SecFormWithOutDates(filler: Filler) => {
